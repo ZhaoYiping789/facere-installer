@@ -46,9 +46,24 @@ if [ -z "${FACERE_GH_TOKEN:-}" ]; then
 fi
 ok "PAT supplied"
 
-# ── Platform check ────────────────────────────────────────────────────
-[ "$(uname)" = "Darwin" ] || die "macOS required (got $(uname)). Linux/Windows support is on the roadmap."
-ok "macOS $(sw_vers -productVersion)"
+# ── Platform detection ────────────────────────────────────────────────
+case "$(uname)" in
+  Darwin)
+    PLATFORM=macos
+    ok "macOS $(sw_vers -productVersion)"
+    ;;
+  Linux)
+    PLATFORM=linux
+    if grep -qi 'microsoft' /proc/version 2>/dev/null; then
+      ok "Linux (WSL) $(uname -r)"
+    else
+      ok "Linux $(uname -r)"
+    fi
+    ;;
+  *)
+    die "Unsupported platform: $(uname). Only macOS and Linux/WSL are supported."
+    ;;
+esac
 
 # ── Resolve latest release asset URL via GitHub API ───────────────────
 bold "Resolving latest release"
@@ -83,8 +98,15 @@ curl -fL --progress-bar \
   "$ASSET_API_URL" \
   | tar -xz --strip-components=1 -C "$DISTRO_DIR"
 
-[ -f "$DISTRO_DIR/install.sh" ] || die "Tarball did not contain install.sh — try rerunning, or check the release on GitHub."
+# Pick install script for this platform
+if [ "$PLATFORM" = "macos" ]; then
+  INSTALL_SCRIPT="$DISTRO_DIR/install.sh"
+else
+  INSTALL_SCRIPT="$DISTRO_DIR/install-wsl.sh"
+fi
+
+[ -f "$INSTALL_SCRIPT" ] || die "Tarball missing $(basename "$INSTALL_SCRIPT") — re-upload tarball with both install.sh and install-wsl.sh."
 ok "extracted"
 
-# ── Hand off to install.sh ────────────────────────────────────────────
-exec "$DISTRO_DIR/install.sh"
+# ── Hand off to platform-specific installer ───────────────────────────
+exec "$INSTALL_SCRIPT"

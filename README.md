@@ -4,13 +4,28 @@ AI-native hardware design CLI for schematic and PCB workflows. Drives
 KiCad through MCP tools — corpus-aware placement, vision-driven layout
 iteration, automated routing.
 
-## Install
+## Install — non-technical users (one click)
 
-facere is currently a **private distribution**. You need:
-1. **Read access to `ZhaoYiping789/facere-distro`** — granted by the maintainer
-2. **A GitHub Personal Access Token (PAT)** with `repo` scope — generate at https://github.com/settings/tokens/new
+Download the `facere-install.command` file from the email the
+maintainer sent you (it has your access token baked in). Then:
 
-Then in **iTerm2** (the default macOS Terminal.app freezes on input — TUI compatibility issue):
+1. Double-click `facere-install.command`
+2. macOS may warn "unidentified developer" → **right-click** the file
+   → **Open** → confirm
+3. A Terminal window opens, the installer runs (5–15 min)
+4. You'll be asked for your Mac password once (so Homebrew can install)
+5. When it says **All done**, open **iTerm2** and run `facere`
+
+The installer handles everything: Homebrew, iTerm2, KiCad 9, Node, the
+facere CLI itself.
+
+## Install — technical users (one command)
+
+If you'd rather skip the wrapper and run a curl one-liner, you'll need:
+1. A GitHub PAT with read access to `ZhaoYiping789/facere-distro`
+2. KiCad 9 + Node 20+ pre-installed (Linux/WSL: the script auto-installs via apt; macOS: you install via brew or installer first)
+
+Same one-liner works on **macOS, Linux, and WSL** — bootstrap detects platform:
 
 ```sh
 curl -fsSL \
@@ -18,9 +33,9 @@ curl -fsSL \
   | FACERE_GH_TOKEN=ghp_xxx sh
 ```
 
-Replace `ghp_xxx` with your PAT. Total install time ~5–10 min.
+Replace `ghp_xxx` with your PAT. ~5–10 min.
 
-Then run:
+Then:
 
 ```sh
 facere
