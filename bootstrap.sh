@@ -69,9 +69,11 @@ ASSET_API_URL=$(printf '%s' "$RELEASE_JSON" \
 ok "found release asset"
 
 # ── Fetch + extract tarball ───────────────────────────────────────────
+# Use --strip-components=1 to drop the tarball's top-level wrapper dir
+# (currently "facere-distro/") and land contents directly into DISTRO_DIR.
 mkdir -p "$INSTALL_DIR"
 rm -rf "$DISTRO_DIR"
-cd "$INSTALL_DIR"
+mkdir -p "$DISTRO_DIR"
 
 bold "Downloading facere distro"
 echo "  to: $DISTRO_DIR"
@@ -79,7 +81,7 @@ curl -fL --progress-bar \
   -H "Authorization: token $FACERE_GH_TOKEN" \
   -H "Accept: application/octet-stream" \
   "$ASSET_API_URL" \
-  | tar -xz -C "$INSTALL_DIR"
+  | tar -xz --strip-components=1 -C "$DISTRO_DIR"
 
 [ -f "$DISTRO_DIR/install.sh" ] || die "Tarball did not contain install.sh — try rerunning, or check the release on GitHub."
 ok "extracted"
