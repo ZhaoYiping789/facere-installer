@@ -13,9 +13,9 @@ facere is currently a **private distribution**. You need:
 Then in **iTerm2** (the default macOS Terminal.app freezes on input — TUI compatibility issue):
 
 ```sh
-FACERE_GH_TOKEN=ghp_xxx curl -fsSL \
+curl -fsSL \
   https://raw.githubusercontent.com/ZhaoYiping789/facere-installer/main/bootstrap.sh \
-  | sh
+  | FACERE_GH_TOKEN=ghp_xxx sh
 ```
 
 Replace `ghp_xxx` with your PAT. Total install time ~5–10 min.
@@ -67,9 +67,9 @@ Re-run the same one-liner. Bootstrap always pulls the latest release, and
 `install.sh` is idempotent — it skips steps that already ran.
 
 ```sh
-FACERE_GH_TOKEN=ghp_xxx curl -fsSL \
+curl -fsSL \
   https://raw.githubusercontent.com/ZhaoYiping789/facere-installer/main/bootstrap.sh \
-  | sh
+  | FACERE_GH_TOKEN=ghp_xxx sh
 ```
 
 ## Uninstall

@@ -1,9 +1,9 @@
 #!/usr/bin/env sh
 # facere bootstrap — fetched via:
 #
-#   FACERE_GH_TOKEN=ghp_xxx curl -fsSL \
+#   curl -fsSL \
 #     https://raw.githubusercontent.com/ZhaoYiping789/facere-installer/main/bootstrap.sh \
-#     | sh
+#     | FACERE_GH_TOKEN=ghp_xxx sh
 #
 # Downloads the latest facere distro tarball from the private
 # `facere-distro` GitHub repo's Releases, extracts it, and runs the
@@ -34,9 +34,13 @@ if [ -z "${FACERE_GH_TOKEN:-}" ]; then
 
   Re-run with your token, e.g.:
 
-    FACERE_GH_TOKEN=ghp_xxx curl -fsSL \\
+    curl -fsSL \\
       https://raw.githubusercontent.com/ZhaoYiping789/facere-installer/main/bootstrap.sh \\
-      | sh
+      | FACERE_GH_TOKEN=ghp_xxx sh
+
+  (Note: the token MUST go in front of \`sh\`, not in front of \`curl\` —
+  shell scoping issue: env vars before a command apply only to that one
+  command, and we need them inside the piped \`sh\` process.)
 
   If you don't have a token, contact the sender."
 fi
