@@ -36,16 +36,14 @@ Install these manually first:
 | **KiCad 9** | https://www.kicad.org/download/macos/ — then add `kicad-cli` to PATH (see below) |
 | **Node 20+** | `brew install node` |
 
-After installing KiCad, add this line to `~/.zshrc`:
+The installer automatically:
+- adds KiCad's `kicad-cli` to your PATH (writes to `~/.zshrc`)
+- installs `uv` (Python toolchain) if missing
+- installs / upgrades Node via Homebrew if it's not already 20+
 
-```sh
-export PATH="/Applications/KiCad/KiCad.app/Contents/MacOS:$PATH"
-```
-
-Then `exec zsh` to reload.
-
-`uv` (Python toolchain manager) is auto-installed by bootstrap if missing.
-You don't need a system Python — `uv` manages its own 3.11+ interpreter.
+So in practice, the only manual step is **installing the KiCad app** (the
+1 GB download from the link above). Everything else gets handled by the
+curl one-liner.
 
 ## What the bootstrap does
 
